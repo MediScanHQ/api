@@ -2,6 +2,7 @@ import face_recognition
 import json
 import numpy as np
 import os
+import hashlib
 
 file_name = "face_hashes.json"
 
@@ -12,6 +13,10 @@ def main():
     face_hashes = load_face_hashes()
 
     save_face_info(face_hashes, img_encoding)
+
+    hash = create_face_hash(img_encoding)
+    print(hash)
+    return hash
 
 def create_face_encoding():
     new_img = face_recognition.load_image_file("image.jpeg")
@@ -34,6 +39,16 @@ def save_face_info(loaded_nparrays, face_encoding):
     list_of_lists = [arr.tolist() for arr in loaded_nparrays]
     with open(file_name, "w") as json_file:
         json.dump(list_of_lists, json_file)
+
+def create_face_hash(face_encoding):
+    array_bytes = face_encoding.tobytes()
+
+    hash_object = hashlib.sha256()
+    hash_object.update(array_bytes)
+    hash_hex = hash_object.hexdigest()
+
+    return hash_hex
+        
 
 
 if __name__ == "__main__":
