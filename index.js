@@ -1,11 +1,11 @@
-const express = require('express');
-const multer = require('multer');
-const bodyParser = require('body-parser');
-const path = require("path");
-const fs = require('fs');
-const {
-    exec
-} = require('child_process');
+import express from 'express';
+import multer from 'multer';
+import bodyParser from 'body-parser';
+import path from 'path';
+import fs from 'fs';
+import { exec } from 'child_process';
+
+import {Address, Signature } from '@aleohq/sdk';
 
 const app = express();
 const port = 3000;
@@ -20,6 +20,8 @@ const upload = multer({
     storage: storage
 });
 
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post("/api/new", upload.single('image'), (req, res) => {
@@ -114,3 +116,15 @@ app.post('/api/find', upload.single('image'), (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+// Verifies an Aleo signature
+function verifySignature(address, signature) {
+    let a = Address.from_string(address)
+    let sig = Signature.from_string(signature)
+
+    const encoder = new TextEncoder();
+    const uint8Array = encoder.encode("hello");
+    let isok = a.verify(uint8Array, sig);
+    console.log("isok: ", isok);
+    return isok;
+}
