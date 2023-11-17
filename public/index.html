@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+
+    <h2>Upload a Picture</h2>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="image">Select an image:</label>
+        <input type="file" name="image" accept="image/*" required>
+        <br>
+        <label for="jsonData">JSON Data:</label>
+        <textarea name="jsonData" rows="4" cols="50" placeholder="Enter JSON data"></textarea>
+        <br>
+        <button type="button" onclick="uploadImage()">Upload</button>
+        <button type="button" onclick="findImage()">Find</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function uploadImage() {
+            const form = document.getElementById('uploadForm');
+            const formData = new FormData(form);
+
+            fetch('http://localhost:3000/api/new', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the result
+                document.getElementById('result').innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+                document.getElementById('result').innerHTML = 'Error occurred';
+            });
+        }
+
+        function findImage() {
+            const form = document.getElementById('uploadForm');
+            const formData = new FormData(form);
+
+            fetch('http://localhost:3000/api/find', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the result
+                document.getElementById('result').innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+                document.getElementById('result').innerHTML = 'Error occurred';
+            });
+        }
+        
+    </script>
+
+</body>
+</html>
