@@ -27,7 +27,7 @@
             const form = document.getElementById('uploadForm');
             const formData = new FormData(form);
 
-            fetch('http://localhost:3000/api/new', {
+            fetch('http://localhost:8080/api/new', {
                 method: 'POST',
                 body: formData
             })
@@ -47,7 +47,7 @@
             const form = document.getElementById('uploadForm');
             const formData = new FormData(form);
 
-            fetch('http://localhost:3000/api/find', {
+            fetch('http://localhost:8080/api/find', {
                 method: 'POST',
                 body: formData
             })
